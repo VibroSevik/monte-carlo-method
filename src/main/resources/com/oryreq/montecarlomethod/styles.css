@@ -1,0 +1,17 @@
+.root2 {
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: red;
+    -fx-background-color: #FC3D44;
+}
+
+.blue_border {
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-background-color: blue;
+}
+
+.root {
+    -fx-max-width: 200;
+    -fx-max-height: 200;
+}
