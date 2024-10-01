@@ -45,6 +45,13 @@ public class TableService<T, Content> {
     }
 
 
+    public TableService<T, Content> clear() {
+        this.table.getColumns().clear();
+        this.table.getItems().clear();
+        return this;
+    }
+
+
                             /*------------------*
                              *     Settings     *
                              *------------------*/

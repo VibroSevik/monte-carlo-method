@@ -1,5 +1,6 @@
 package com.oryreq.montecarlomethod.services;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.NumberAxis;
@@ -60,6 +61,11 @@ public class HistogramService<T, U> {
         return this.histogram.getData().get(0).getData();
     }
 
+
+    public HistogramService<T, U> clear() {
+        this.histogram.getData().clear();
+        return this;
+    }
 
                             /*------------------*
                              *     Settings     *

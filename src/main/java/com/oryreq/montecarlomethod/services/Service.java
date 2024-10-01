@@ -70,6 +70,10 @@ public class Service {
         fillHistogramTooltips(columns);
     }
 
+    public void clearOldHistogram() {
+        this.histogramService.clear();
+    }
+
     public void fillHistogramTooltips(ObservableList<XYChart.Data<String, Integer>> columns) {
         columns.forEach(column -> {
             Tooltip.install(column.getNode(), new Tooltip(column.getXValue() + "\n" + column.getYValue()));
@@ -87,6 +91,10 @@ public class Service {
         var columns = List.of("Number", "Count of drops");
         var propertyNames = List.of("number", "dropsCount");
         this.tableService.build(items, columns, propertyNames);
+    }
+
+    public void clearOldTable() {
+        this.tableService.clear();
     }
 
     private Map<String, Integer> prepareHistogramData(Map<Double, Integer> points) {

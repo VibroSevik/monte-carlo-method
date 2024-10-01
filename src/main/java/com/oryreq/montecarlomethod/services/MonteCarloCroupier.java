@@ -15,9 +15,6 @@ import java.util.function.Function;
  */
 public class MonteCarloCroupier {
 
-    private final TreeMap<Double, Integer> results = new TreeMap<>();
-
-
     public Map<Double, Integer> play(int draws, List<Double> points) {
         return this.play(draws, points, 1);
     }
@@ -27,6 +24,8 @@ public class MonteCarloCroupier {
                 (number) -> points.stream().filter(point -> point > number).findFirst().get();
 
         int rounding = (int) Math.pow(10, roundedDigits);
+
+        TreeMap<Double, Integer> results = new TreeMap<>();
         for (int i = 0; i < draws; i++) {
             double number = Math.random();
             double approximatedPoint = Math.round(approximateNumber.apply(number) * rounding) / (double) rounding;

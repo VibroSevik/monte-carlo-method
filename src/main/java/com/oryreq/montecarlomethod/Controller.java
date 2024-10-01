@@ -50,7 +50,9 @@ public class Controller implements Initializable {
         int draws = Integer.parseInt(drawsCount.getText());
 
         var numbers = service.getNumbers(n, p, draws);
+        service.clearOldHistogram();
         service.buildHistogram(numbers);
+        service.clearOldTable();
         service.buildTable(numbers);
     }
 
