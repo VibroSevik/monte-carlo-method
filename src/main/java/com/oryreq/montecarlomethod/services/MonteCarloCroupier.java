@@ -1,9 +1,12 @@
 package com.oryreq.montecarlomethod.services;
 
+import com.oryreq.montecarlomethod.models.Interval;
+
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 /**
  * This class realizes object so-called <strong>MonteCarloCroupier</strong>. <br>
@@ -15,24 +18,72 @@ import java.util.function.Function;
  */
 public class MonteCarloCroupier {
 
-    public Map<Double, Integer> play(int draws, List<Double> points) {
-        return this.play(draws, points, 1);
-    }
+                        /*------------------------------------*
+                         *          Discrete playing          *
+                        *------------------------------------*/
+    public Map<Integer, Integer> discretePlay(int draws, List<Double> points, List<Integer> values) {
+        Map<Integer, Integer> results = createDefaultMap(values);
 
-    public Map<Double, Integer> play(int draws, List<Double> points, int roundedDigits) {
-        Function<Double, Double> approximateNumber =
-                (number) -> points.stream().filter(point -> point > number).findFirst().get();
-
-        int rounding = (int) Math.pow(10, roundedDigits);
-
-        TreeMap<Double, Integer> results = new TreeMap<>();
         for (int i = 0; i < draws; i++) {
             double number = Math.random();
-            double approximatedPoint = Math.round(approximateNumber.apply(number) * rounding) / (double) rounding;
-            int count = results.getOrDefault(approximatedPoint, 0);
-            results.put(Math.round(approximatedPoint * rounding) / (double) rounding, count + 1);
+            var begin = getIntervalEnds(number, points).begin();
+            var index = points.indexOf(begin);
+            var value = values.get(index);
+            int valueCount = results.get(value);
+            results.put(value, valueCount + 1);
         }
+
         return results;
+    }
+
+    private Map<Integer, Integer> createDefaultMap(List<Integer> values) {
+        return values.stream().collect(
+                Collectors.toMap(
+                        value -> value,
+                        value -> 0)
+        );
+    }
+
+    private Interval getIntervalEnds(double number, List<Double> points) {
+        for (int i = 1; i < points.size(); i++) {
+            if (points.get(i) > number) {
+                return new Interval(points.get(i - 1), points.get(i));
+            }
+        }
+        return null;
+    }
+
+
+                        /*--------------------------------------*
+                         *          Continuous playing          *
+                         *--------------------------------------*/
+    public Map<Interval, Integer> continuousPlay(int draws, List<Interval> intervals) {
+        Map<Interval, Integer> results = createDefaultContinuousMap(intervals);
+
+        for (int i = 0; i < draws; i++) {
+            double number = Math.random();
+            var interval = getInterval(number, intervals);
+            int valueCount = results.get(interval);
+            results.put(interval, valueCount + 1);
+        }
+
+        return results;
+    }
+
+    private Map<Interval, Integer> createDefaultContinuousMap(List<Interval> intervals) {
+        return new TreeMap<>(
+                intervals.stream().collect(
+                        Collectors.toMap(
+                                interval -> interval,
+                                interval -> 0))
+        );
+    }
+
+    private Interval getInterval(double number, List<Interval> intervals) {
+        return intervals.stream()
+                .filter(interval -> interval.contains(number))
+                .findFirst()
+                .orElse(null);
     }
 
 }

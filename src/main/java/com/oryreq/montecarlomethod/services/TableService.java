@@ -6,7 +6,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
-import java.util.stream.IntStream;
+
 
 /**
  * This class realizes object so-called <strong>TableService</strong>. <br>
@@ -35,18 +35,25 @@ public class TableService<T, Content> {
     public TableService<T, Content> build(ObservableList<T> items, List<String> columnNames, List<String> propertyNames) {
         this.table.setItems(items);
 
-        IntStream.range(0, columnNames.size()).forEach(i -> {
+        if (this.table.getColumns().isEmpty()) {
+            this.createColumns(columnNames, propertyNames);
+            return this;
+        }
+
+        return this;
+    }
+
+    private TableService<T, Content> createColumns(List<String> columnNames, List<String> propertyNames) {
+        for (int i = 0; i < columnNames.size(); i++) {
             var column = new TableColumn<T, Content>(columnNames.get(i));
             column.setCellValueFactory(new PropertyValueFactory<>(propertyNames.get(i)));
             this.table.getColumns().add(column);
-        });
-
+        }
         return this;
     }
 
 
     public TableService<T, Content> clear() {
-        this.table.getColumns().clear();
         this.table.getItems().clear();
         return this;
     }

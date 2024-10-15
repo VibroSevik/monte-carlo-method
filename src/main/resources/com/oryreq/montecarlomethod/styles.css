@@ -1,17 +1,210 @@
-.root2 {
-    -fx-background-radius: 18;
-    -fx-border-radius: 18;
-    -fx-border-color: red;
-    -fx-background-color: #FC3D44;
-}
-
 .blue_border {
     -fx-background-radius: 18;
-    -fx-border-radius: 18;
-    -fx-background-color: blue;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+
+    -fx-background-color: #2B2B42;
 }
 
-.root {
-    -fx-max-width: 200;
-    -fx-max-height: 200;
+.sidebar__container {
+    -fx-background-radius: 18;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+
+    -fx-background-color: #2E2E48;
+}
+
+.sidebar__button:hover {
+    -fx-cursor: hand;
+}
+
+.active_button {
+    -fx-border-color: #3C3C60;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20px;
+    -fx-border-width: 2;
+    -fx-background-color: #353553;
+}
+
+.active_button:hover {
+    -fx-cursor: hand;
+}
+
+@font-face {
+    font-family: Catamaran;
+    src: url('Catamaran-Bold.ttf');
+}
+
+.active_button__text {
+    -fx-font-family: 'Catamaran';
+    -fx-text-fill: #9191C4;
+    -fx-font-weight: 700;
+}
+
+.active_button__text:hover {
+    -fx-cursor: hand;
+}
+
+.distribution__button:hover {
+    -fx-cursor: hand;
+}
+
+.trans {
+    -fx-background-radius: 18;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+
+    -fx-background-color: #2E2E48;
+}
+
+.root12 {
+    -fx-border-color: red;
+    -fx-border-width: 1;
+}
+
+.distribution_window__inputs {
+    -fx-background-color: #353553;
+    -fx-text-fill: #EFEFFF;
+    -fx-border-width: 0.3;
+    -fx-border-color: #9191C4;
+}
+
+.distribution_window__inputs:focused {
+    -fx-effect: dropshadow(one-pass-box, white, 3, 0, 0, 0);
+}
+
+.chart-content .chart-plot-background {
+    -fx-background-color: #2B2B42;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #70709F;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #70709F;
+}
+
+.chart-bar {
+    -fx-background-color: #5A84FC;
+}
+
+.distribution_window__histogram {
+    -fx-text-fill: white;
+    -fx-tick-label-fill: white;
+}
+
+.version__circle {
+    -fx-min-width: 6px;
+    -fx-min-height: 6px;
+    -fx-background-color: #62BE76;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+}
+
+.version__text {
+    -fx-text-fill: #7E7EAC;
+    -fx-font-weight: 500;
+    -fx-font-size: 13;
+}
+
+.overview__button {
+    -fx-text-fill: #EFEFFF;
+    -fx-font-weight: 500;
+    -fx-font-size: 24;
+}
+
+.overview__button:hover {
+    -fx-cursor: hand;
+}
+
+.welcome_back__text {
+    -fx-text-fill: #A0A0D4;
+    -fx-font-weight: 500;
+    -fx-font-size: 15;
+}
+
+.check_overview__text {
+    -fx-text-fill: #6A6A92;
+    -fx-font-weight: 500;
+    -fx-font-size: 12;
+}
+
+.draws__text {
+    -fx-text-fill: #EFEFFF;
+    -fx-font-weight: 500;
+    -fx-font-size: 24;
+}
+
+.draws__item {
+    -fx-text-fill: #65658A;
+    -fx-font-weight: 500;
+    -fx-font-size: 13;
+}
+
+.chart-legend {
+    -fx-background-color:  transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: white;
+}
+
+.draws__item:hover {
+    -fx-text-fill: #7C7CA9;
+    -fx-cursor: hand;
+}
+
+.draws__item:focused {
+    -fx-text-fill: #EFEFFF;
+    -fx-font-weight: 500;
+    -fx-border-color: #5A84FC;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 -1 0;
+}
+
+.input_distribution_data__container {
+    -fx-background-color: #2B2B42;
+}
+
+.variations_table {
+    -fx-background-color: #2B2B42;
+}
+
+.table-view {
+    -fx-background-color: #2B2B42;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-cell {
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent transparent #5A84FC transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: white;
+}
+
+.axis {
+    -fx-text-alignment: right;
+    -fx-text-fill: red;
+    -fx-label-padding: 20 0 0 0;
+}
+
+.axis-label {
+    -fx-text-alignment: right;
+    -fx-text-fill: red;
+    -fx-label-padding: 20 0 0 0;
 }

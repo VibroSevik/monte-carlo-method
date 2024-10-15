@@ -1,33 +1,25 @@
 package com.oryreq.montecarlomethod;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import com.oryreq.montecarlomethod.windows.MainWindow;
 
-import java.io.IOException;
-import java.net.URL;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 
 public class Application extends javafx.application.Application {
 
+    public static Stage primaryStage;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1080,  720);
-        scene.setFill(Color.TRANSPARENT);
+    public void start(Stage stage) throws Exception {
+        primaryStage = stage;
+        primaryStage.setTitle("Monte Carlo Croupier");
+        primaryStage.getIcons().add(new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png"));
+        primaryStage.setOpacity(0);
+        primaryStage.show();
 
-        URL url = this.getClass().getResource("styles.css");
-        String css = url.toExternalForm();
-        scene.getStylesheets().add(css);
-        stage.setTitle("Monte Carlo Croupier");
-        stage.getIcons().add(new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png"));
 
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.TRANSPARENT);
-
-        stage.show();
+        var mainWindow = new MainWindow(primaryStage);
     }
 
     public static void main(String[] args) {

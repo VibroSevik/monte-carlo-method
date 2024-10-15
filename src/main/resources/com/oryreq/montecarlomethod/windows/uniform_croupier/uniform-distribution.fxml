@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="activeWindow"
+            fx:controller="com.oryreq.montecarlomethod.windows.uniform_croupier.UniformCroupierController"
+            styleClass="blue_border">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Pane fx:id="versionContainer">
+        <Pane fx:id="versionCircle" styleClass="version__circle"/>
+        <Label fx:id="version" styleClass="version__text">Activated | v. 0.1.0</Label>
+    </Pane>
+
+    <Label fx:id="overviewButton" styleClass="overview__button">Overview</Label>
+
+    <Label fx:id="welcomeBackText" styleClass="welcome_back__text">Welcome Back!</Label>
+    <Label fx:id="checkOverview" styleClass="check_overview__text">To keep up-to-date on software changes please check overview</Label>
+
+    <Pane fx:id="activeButton" styleClass="active_button">
+        <Label fx:id="activeButtonText" styleClass="active_button__text">IFORM CROUPIER</Label>
+    </Pane>
+
+    <Label fx:id="drawsText" styleClass="draws__text">Draws</Label>
+    <FlowPane fx:id="drawsCount2" styleClass="draws_count__container">
+        <Label fx:id="drawsHundred" onMouseClicked="#onHundredDrawsClicked" styleClass="draws__item">A HUNDRED</Label>
+        <Label fx:id="drawsThousand" onMouseClicked="#onThousandDrawsClicked" styleClass="draws__item">A THOUSAND</Label>
+        <Label fx:id="drawsMillion" onMouseClicked="#onMillionDrawsClicked" styleClass="draws__item">A MILLION</Label>
+        <Label fx:id="drawsCustom" onMouseClicked="#onCustomDrawsClicked" styleClass="draws__item">CUSTOM</Label>
+    </FlowPane>
+
+    <StackedBarChart fx:id="histogram" prefWidth="540" prefHeight="360" GridPane.rowIndex="1" GridPane.columnIndex="1">
+        <xAxis>
+            <CategoryAxis styleClass="distribution_window__histogram"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis styleClass="distribution_window__histogram"/>
+        </yAxis>
+    </StackedBarChart>
+
+</AnchorPane>

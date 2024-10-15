@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<AnchorPane
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="com.oryreq.montecarlomethod.windows.sidebar.SidebarController"
+        fx:id="sidebarContainer"
+        styleClass="sidebar__container">
+
+    <ImageView fx:id="logo"/>
+
+    <Pane fx:id="activeButton" styleClass="active_button">
+    </Pane>
+
+    <Pane fx:id="binomialDistributionContainer" styleClass="sidebar__button" onMouseClicked="#binomialDistributionOnClick">
+        <ImageView fx:id="binomialDistribution" styleClass="distribution__button" onMouseClicked="#binomialDistributionOnClick"/>
+        <Label fx:id="activeButtonText" styleClass="active_button__text">BIN</Label>
+    </Pane>
+
+    <Pane fx:id="uniformDistributionContainer" styleClass="sidebar__button" onMouseClicked="#uniformDistributionOnClick">
+        <ImageView fx:id="uniformDistribution" styleClass="distribution__button" onMouseClicked="#uniformDistributionOnClick"/>
+    </Pane>
+
+
+
+
+
+</AnchorPane>

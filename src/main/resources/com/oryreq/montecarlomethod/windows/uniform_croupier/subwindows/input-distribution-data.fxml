@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.oryreq.montecarlomethod.windows.uniform_croupier.subwindows.input_data.InputDataController"
+      prefHeight="115.0" prefWidth="200.0"
+      styleClass="input_distribution_data__container">
+
+
+    <TextField fx:id="drawsCount" promptText="Input count of draws" styleClass="distribution_window__inputs"/>
+    <TextField fx:id="intervalBegin" promptText="Input interval's begin" styleClass="distribution_window__inputs"/>
+    <TextField fx:id="intervalEnd" promptText="Input interval's end" styleClass="distribution_window__inputs"/>
+    <Button text="Submit!" onAction="#onSubmitButtonClick"/>
+
+</VBox>
+

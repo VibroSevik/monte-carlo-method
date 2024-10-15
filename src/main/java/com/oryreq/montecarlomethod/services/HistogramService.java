@@ -1,14 +1,11 @@
 package com.oryreq.montecarlomethod.services;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
+
 
 /**
  * This class realizes object so-called <strong>HistogramService</strong>. <br>
@@ -22,29 +19,24 @@ import java.util.stream.IntStream;
  */
 public class HistogramService<T, U> {
 
-    private final BarChart<T, U> histogram;
+    private final StackedBarChart<T, U> histogram;
 
 
-    public HistogramService(BarChart<T, U> histogram) {
+    public HistogramService(StackedBarChart<T, U> histogram) {
         this.histogram = histogram;
+        //this.histogram.setStyle("-fx-border-color: red");
     }
 
 
-                            /*------------------*
-                             *     Builders     *
-                             *------------------*/
-    public HistogramService<T, U> build(String name, Map<T, U> data) {
-        var x = data.keySet().stream().toList();
-        var y = data.values().stream().toList();
-        return build(name, x, y);
-    }
-
+                            /*---------------------------*
+                             *     Histogram actions     *
+                             *---------------------------*/
     public HistogramService<T, U> build(String name, List<T> x, List<U> y) {
         XYChart.Series<T, U> series = new XYChart.Series<>();
         series.setName(name);
 
         IntStream.range(0, x.size()).forEach(i -> {
-            var data = new XYChart.Data<T, U>(x.get(i), y.get(i));
+            var data = new XYChart.Data<>(x.get(i), y.get(i));
             series.getData().add(data);
         });
 
@@ -53,19 +45,23 @@ public class HistogramService<T, U> {
         return this;
     }
 
-
-                     /*--------------------------------*
-                      *     Histogram data getters     *
-                      *--------------------------------*/
-    public ObservableList<XYChart.Data<T, U>> getColumns() {
-        return this.histogram.getData().get(0).getData();
-    }
-
-
     public HistogramService<T, U> clear() {
         this.histogram.getData().clear();
         return this;
     }
+
+
+                         /*--------------------------------*
+                          *     Histogram data getters     *
+                          *--------------------------------*/
+    public ObservableList<XYChart.Data<T, U>> getColumns() {
+        return this.histogram.getData().get(0).getData();
+    }
+
+    public StackedBarChart<T, U> getHistogram() {
+        return this.histogram;
+    }
+
 
                             /*------------------*
                              *     Settings     *
@@ -97,6 +93,44 @@ public class HistogramService<T, U> {
             return this;
         }
         throw new IllegalArgumentException("YAxis is of type " + histogram.getYAxis().getClass().getName() + " tick unit property available for NumberAxis");
+    }
+
+    public HistogramService<T, U> setMaxHeight(double maxHeight) {
+        this.histogram.setMaxHeight(maxHeight);
+        return this;
+    }
+
+    public HistogramService<T, U> setMaxWidth(double maxWidth) {
+        this.histogram.setMaxWidth(maxWidth);
+        return this;
+    }
+
+    public HistogramService<T, U> setCategoryGap(double gap) {
+        this.histogram.setCategoryGap(gap);
+        return this;
+    }
+
+    public HistogramService<T, U> setMargins(double margin) {
+        ((CategoryAxis) this.histogram.getXAxis()).setStartMargin(margin);
+        ((CategoryAxis) this.histogram.getXAxis()).setEndMargin(margin);
+        return this;
+    }
+
+    public HistogramService<T, U> changeYAxisScale(int upperBound, int tickUnit) {
+        return this.setUpperBound(upperBound)
+                .setTickUnit(tickUnit);
+    }
+
+    public HistogramService<T, U> addColumnsBorder(int width, String color) {
+        var nodes = this.getColumns().stream().map(column -> column.getNode()).toList();
+        nodes.forEach(node -> node.setStyle("-fx-border-width: " + width + "; -fx-border-color: " + color + ";"));
+        return this;
+    }
+
+    public HistogramService<T, U> hideXAxis() {
+        this.histogram.getXAxis().setOpacity(0);
+        this.histogram.getXAxis().setTickLabelsVisible(false);
+        return this;
     }
 
 }

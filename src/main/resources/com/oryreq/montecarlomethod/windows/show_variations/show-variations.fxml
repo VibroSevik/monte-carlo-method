@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.oryreq.montecarlomethod.windows.show_variations.ShowVariationsController"
+      prefHeight="350.0" prefWidth="500.0">
+
+    <TableView fx:id="table" styleClass="variations_table"/>
+
+</VBox>
