@@ -1,24 +1,21 @@
-package com.oryreq.montecarlomethod.windows.binomial_croupier;
+package com.oryreq.montecarlomethod.windows.normal_croupier;
 
-
+import com.google.common.eventbus.Subscribe;
 import com.oryreq.montecarlomethod.Application;
 import com.oryreq.montecarlomethod.models.CharacteristicsData;
 import com.oryreq.montecarlomethod.models.StringEvent;
 import com.oryreq.montecarlomethod.services.EventBusFactory;
 import com.oryreq.montecarlomethod.services.SampleCharacteristicsService;
 import com.oryreq.montecarlomethod.windows.CustomWindow;
-
-import com.google.common.eventbus.Subscribe;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.chart.StackedBarChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.lang.reflect.Modifier;
@@ -26,16 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-/**
- * This class realizes object so-called <strong>Controller</strong>. <br>
- * It is used to declare and manage all control elements in application like a buttons, input fields and barchart etc. <br>
- * Redirect all methods to class-service so-called <strong>Service</strong>,
- * for example, reset focus from all elements or fill histogram and table data. <br>
- *
- * @Date: 29.09.2024
- * @Author: Vsevolod @Oryreq Ashihmin
- */
-public class BinomialCroupierController implements Initializable {
+public class NormalCroupierController implements Initializable {
 
 
     /*---------------------------------------------*
@@ -85,17 +73,17 @@ public class BinomialCroupierController implements Initializable {
     protected Label drawsCustom;
 
     @FXML
-    private StackedBarChart<String, Integer> histogram;
+    private StackedBarChart<String, Double> histogram;
 
 
     /*----------------------------------*
      *               Data               *
      *----------------------------------*/
-    private int n = 11;
-    private double p = 0.07;
+    private double mathExpectation = -0.5;
+    private double standardError = 1;
     private int draws;
 
-    private BinomialCroupierService binomialCroupierService;
+    private NormalCroupierService normalCroupierService;
 
 
     /*------------------------------------*
@@ -105,10 +93,9 @@ public class BinomialCroupierController implements Initializable {
     private CustomWindow variationsWindow;
     private CustomWindow characteristicsWindow;
 
-
     private void play() {
-        var drawData = binomialCroupierService.getDrawData(n, p, draws);
-        binomialCroupierService.buildHistogram(draws, drawData);
+        var drawData = normalCroupierService.getDrawData(mathExpectation, standardError, draws);
+        normalCroupierService.buildHistogram(draws, drawData, activeWindow);
 
         try {
             this.variationsWindow = this.createVariationsWindow();
@@ -118,7 +105,7 @@ public class BinomialCroupierController implements Initializable {
 
             this.characteristicsWindow = this.createCharacteristicsWindow();
             this.characteristicsWindow.setInitOwner(Application.primaryStage);
-            var selection = SampleCharacteristicsService.fromDrawDataToSelection(drawData);
+            var selection = SampleCharacteristicsService.fromUniformDrawDataToSelection(drawData);
 
             var mathExpectation = SampleCharacteristicsService.mathExpectation(selection);
             var biasVariance = SampleCharacteristicsService.biasVariance(selection);
@@ -133,6 +120,7 @@ public class BinomialCroupierController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     /*----------------------------------*
      *     Elements event listeners     *
@@ -179,14 +167,14 @@ public class BinomialCroupierController implements Initializable {
      *-------------------------------------*/
     @Subscribe
     public void handleInputCustomData(StringEvent event) {
-        if (!event.getType().equals(StringEvent.EventTypes.HANDLE_DISCRETE_INPUT)) {
+        if (!event.getType().equals(StringEvent.EventTypes.HANDLE_NORMAL_INPUT)) {
             return;
         }
 
         var data = event.getValue();
-        this.n = Integer.parseInt(data.split(" ")[0]);
-        this.p = Double.parseDouble(data.split(" ")[1]);
-        this.draws = Integer.parseInt(data.split(" ")[2]);
+        this.draws = Integer.parseInt(data.split(" ")[0]);
+        this.mathExpectation = Double.parseDouble(data.split(" ")[1]);
+        this.standardError = Double.parseDouble(data.split(" ")[2]);
         this.inputDataWindow.close();
         play();
     }
@@ -196,25 +184,25 @@ public class BinomialCroupierController implements Initializable {
      *          Initialize actions          *
      *--------------------------------------*/
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         EventBusFactory.getEventBus().register(this);
         CustomWindow.setUnfocusToAllElements(this);
         initializeElements();
         setStars();
         updateElementsForStars();
 
-        this.binomialCroupierService = new BinomialCroupierService(histogram);
+        this.normalCroupierService = new NormalCroupierService(histogram);
     }
 
     private void initializeElements() {
         // Sidebar menu
-        this.activeButton.setMinHeight(70);
-        this.activeButton.setMinWidth(155);
+        this.activeButton.setPrefHeight(70);
+        this.activeButton.setPrefWidth(155);
         this.activeButton.setLayoutX(-30);
-        this.activeButton.setLayoutY(160);
+        this.activeButton.setLayoutY(320);
 
-        this.activeButtonText.setLayoutX(0);
-        this.activeButtonText.setLayoutY(187);
+        this.activeButtonText.setLayoutX(-1);
+        this.activeButtonText.setLayoutY(347);
 
         // Current window elements
         this.version.setLayoutX(150);
@@ -232,22 +220,22 @@ public class BinomialCroupierController implements Initializable {
         this.checkOverview.setLayoutY(125);
 
         // Histogram elements
-        this.drawsText.setLayoutX(100);
+        this.drawsText.setLayoutX(150);
         this.drawsText.setLayoutY(250);
 
-        this.drawsHundred.setLayoutX(100);
+        this.drawsHundred.setLayoutX(150);
         this.drawsHundred.setLayoutY(290);
 
-        this.drawsThousand.setLayoutX(200);
+        this.drawsThousand.setLayoutX(250);
         this.drawsThousand.setLayoutY(290);
 
-        this.drawsMillion.setLayoutX(300);
+        this.drawsMillion.setLayoutX(350);
         this.drawsMillion.setLayoutY(290);
 
-        this.drawsCustom.setLayoutX(400);
+        this.drawsCustom.setLayoutX(450);
         this.drawsCustom.setLayoutY(290);
 
-        this.histogram.setLayoutX(80);
+        this.histogram.setLayoutX(130);
         this.histogram.setLayoutY(350);
     }
 
@@ -307,7 +295,7 @@ public class BinomialCroupierController implements Initializable {
     }
 
     private CustomWindow createInputWindow() throws Exception {
-        var resource = Application.class.getResource("windows/binomial_croupier/subwindows/input-distribution-data.fxml");
+        var resource = Application.class.getResource("windows/normal_croupier/subwindows/input-distribution-data.fxml");
         var styles = Application.class.getResource("styles.css");
 
         var stage = new Stage();

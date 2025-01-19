@@ -8,8 +8,11 @@ public class StringEvent {
     public enum EventTypes {
         HANDLE_DISCRETE_INPUT,
         HANDLE_CONTINUOUS_INPUT,
+        HANDLE_NORMAL_INPUT,
         OPEN_BINOMIAL_WINDOW,
         OPEN_UNIFORM_WINDOW,
+        OPEN_NORMAL_WINDOW,
+        OPEN_ERROR_WINDOW,
     }
 
     public StringEvent(EventTypes type, String value) {

@@ -10,10 +10,11 @@
 <?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.TableView?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:id="activeWindow"
-            fx:controller="com.oryreq.montecarlomethod.windows.uniform_croupier.UniformCroupierController"
+            fx:controller="com.oryreq.montecarlomethod.windows.error.ErrorController"
             styleClass="blue_border">
 
     <padding>
@@ -31,7 +32,7 @@
     <Label fx:id="checkOverview" styleClass="check_overview__text">To keep up-to-date on software changes please check overview</Label>
 
     <Pane fx:id="activeButton" styleClass="active_button">
-        <Label fx:id="activeButtonText" styleClass="active_button__text">IFORM CROUPIER</Label>
+        <Label fx:id="activeButtonText" styleClass="active_button__text">ROR</Label>
     </Pane>
 
     <Label fx:id="drawsText" styleClass="draws__text">Draws</Label>
@@ -39,16 +40,8 @@
         <Label fx:id="drawsHundred" onMouseClicked="#onHundredDrawsClicked" styleClass="draws__item">A HUNDRED</Label>
         <Label fx:id="drawsThousand" onMouseClicked="#onThousandDrawsClicked" styleClass="draws__item">A THOUSAND</Label>
         <Label fx:id="drawsMillion" onMouseClicked="#onMillionDrawsClicked" styleClass="draws__item">A MILLION</Label>
-        <Label fx:id="drawsCustom" onMouseClicked="#onCustomDrawsClicked" styleClass="draws__item">CUSTOM</Label>
     </FlowPane>
 
-    <StackedBarChart fx:id="histogram" prefWidth="540" prefHeight="360" GridPane.rowIndex="1" GridPane.columnIndex="1">
-        <xAxis>
-            <CategoryAxis styleClass="distribution_window__histogram"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis styleClass="distribution_window__histogram"/>
-        </yAxis>
-    </StackedBarChart>
+    <TableView fx:id="table" styleClass="variations_table" prefHeight="50.0" prefWidth="500.0"/>
 
 </AnchorPane>

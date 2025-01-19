@@ -19,6 +19,8 @@ public class MainWindow {
     private CustomWindow sidebar;
     private CustomWindow binomialCroupier;
     private CustomWindow uniformCroupier;
+    private CustomWindow normalCroupier;
+    private CustomWindow error;
 
 
     public MainWindow(Stage applicationStage) throws Exception {
@@ -56,6 +58,12 @@ public class MainWindow {
 
         uniformCroupier = createUniformDistributionWindow();
         uniformCroupier.setInitOwner(applicationStage);
+
+        normalCroupier = createNormalDistributionWindow();
+        normalCroupier.setInitOwner(applicationStage);
+
+        error = createErrorWindow();
+        error.setInitOwner(applicationStage);
     }
 
 
@@ -110,16 +118,66 @@ public class MainWindow {
         return new CustomWindow(resource, styles, stage, width, height);
     }
 
+    private CustomWindow createNormalDistributionWindow() throws Exception {
+        var resource = Application.class.getResource("windows/normal_croupier/normal-distribution.fxml");
+        var styles = Application.class.getResource("styles.css");
+
+        var width = 1080;
+        var height = 720;
+
+        var stage = new Stage();
+        stage.setTitle("Normal croupier");
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setResizable(false);
+        stage.setX(450);
+        stage.setY(180);
+
+        return new CustomWindow(resource, styles, stage, width, height);
+    }
+
+    private CustomWindow createErrorWindow() throws Exception {
+        var resource = Application.class.getResource("windows/error/error.fxml");
+        var styles = Application.class.getResource("styles.css");
+
+        var width = 1080;
+        var height = 720;
+
+        var stage = new Stage();
+        stage.setTitle("Normal croupier");
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setResizable(false);
+        stage.setX(450);
+        stage.setY(180);
+
+        return new CustomWindow(resource, styles, stage, width, height);
+    }
+
     @Subscribe
-    public void handleUniformWindowOpen(StringEvent event) {
+    public void handleWindowOpen(StringEvent event) {
         switch (event.getType()) {
             case OPEN_BINOMIAL_WINDOW -> {
                 binomialCroupier.show();
                 uniformCroupier.close();
+                normalCroupier.close();
+                error.close();
             }
             case OPEN_UNIFORM_WINDOW -> {
                 uniformCroupier.show();
                 binomialCroupier.close();
+                normalCroupier.close();
+                error.close();
+            }
+            case OPEN_NORMAL_WINDOW -> {
+                normalCroupier.show();
+                binomialCroupier.close();
+                uniformCroupier.close();
+                error.close();
+            }
+            case OPEN_ERROR_WINDOW -> {
+                error.show();
+                binomialCroupier.close();
+                uniformCroupier.close();
+                normalCroupier.close();
             }
         }
     }

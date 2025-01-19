@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ShowVariationsService {
 
-    private TableService<DrawData, String> tableService;
+    private final TableService<DrawData, String> tableService;
 
     private final List<String> columnNames = List.of("Number", "Probability", "Count of drops", "Frequency of drops");
     private final List<String> propertyNames = List.of("number", "probability", "dropsCount", "frequency");

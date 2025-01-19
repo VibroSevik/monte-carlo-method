@@ -13,7 +13,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:id="activeWindow"
-            fx:controller="com.oryreq.montecarlomethod.windows.uniform_croupier.UniformCroupierController"
+            fx:controller="com.oryreq.montecarlomethod.windows.normal_croupier.NormalCroupierController"
             styleClass="blue_border">
 
     <padding>
@@ -31,7 +31,7 @@
     <Label fx:id="checkOverview" styleClass="check_overview__text">To keep up-to-date on software changes please check overview</Label>
 
     <Pane fx:id="activeButton" styleClass="active_button">
-        <Label fx:id="activeButtonText" styleClass="active_button__text">IFORM CROUPIER</Label>
+        <Label fx:id="activeButtonText" styleClass="active_button__text">RMAL CROUPIER</Label>
     </Pane>
 
     <Label fx:id="drawsText" styleClass="draws__text">Draws</Label>

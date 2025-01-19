@@ -51,10 +51,10 @@ public class BinomialCroupierService {
 
         List<Double> probabilities = values.stream()
                                             .map(value -> ExtendedMath.binomialDistribution(value, n, p))
+                                              //.map(value -> ExtendedMath.puassonDistribution(2.88, value))
                                             .toList();
 
         var points = getIntervalPoints(probabilities);
-
         var numbers = this.croupier.discretePlay(drawsCount, points, values);
         return prepareDrawData(numbers, probabilities, drawsCount);
     }

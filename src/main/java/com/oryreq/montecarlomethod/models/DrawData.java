@@ -31,6 +31,13 @@ public class DrawData {
         this.frequency = new SimpleStringProperty(String.valueOf(frequency));
     }
 
+    public DrawData(String number, double probability, double dropsCount, double frequency) {
+        this.number = new SimpleStringProperty(number);
+        this.probability = new SimpleStringProperty(String.valueOf(probability));
+        this.dropsCount = new SimpleStringProperty(String.valueOf(dropsCount));
+        this.frequency = new SimpleStringProperty(String.valueOf(frequency));
+    }
+
     public DrawData(Interval interval, double probability, int dropsCount, double frequency) {
         this.number = new SimpleStringProperty("(" + interval.begin() + "," + interval.end() + ")");
         this.probability = new SimpleStringProperty(String.valueOf(probability));

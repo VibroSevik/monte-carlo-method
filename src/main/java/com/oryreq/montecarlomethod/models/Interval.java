@@ -51,6 +51,10 @@ public class Interval implements Comparable<Interval> {
         return this.end;
     }
 
+    public Double length() {
+        return this.length;
+    }
+
     @Override
     public int compareTo(Interval interval) {
         return this.begin.compareTo(interval.begin);

@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -33,6 +32,12 @@ public class SidebarController implements Initializable {
     private ImageView uniformDistribution;
 
     @FXML
+    private ImageView normalDistribution;
+
+    @FXML
+    private ImageView error;
+
+    @FXML
     protected Pane activeButton;
 
     @FXML
@@ -44,17 +49,25 @@ public class SidebarController implements Initializable {
     @FXML
     protected Pane uniformDistributionContainer;
 
+    @FXML
+    protected Pane normalDistributionContainer;
+
+    @FXML
+    protected Pane errorContainer;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        var image = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png");
+        var image = new Image(String.valueOf(getClass().getResource("/logo.png")));
+        //var image = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png");
         logo.setImage(image);
         logo.setFitHeight(40);
         logo.setFitWidth(40);
         logo.setLayoutX(20);
         logo.setLayoutY(20);
 
-        var image2 = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/binomial_distribution.png");
+        var image2 = new Image(String.valueOf(getClass().getResource("/binomial_distribution.png")));
+        //var image2 = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/binomial_distribution.png");
         binomialDistribution.setImage(image2);
         binomialDistribution.setFitHeight(30);
         binomialDistribution.setFitWidth(30);
@@ -74,7 +87,8 @@ public class SidebarController implements Initializable {
         activeButtonText.setLayoutX(60);
         activeButtonText.setLayoutY(187);
 
-        var uniformDistributionImage = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/uniform_distribution.png");
+        var uniformDistributionImage = new Image(String.valueOf(getClass().getResource("/uniform_distribution.png")));
+        //var uniformDistributionImage = new Image("file:./src/main/resources/com/oryreq/montecarlomethod/uniform_distribution.png");
         uniformDistribution.setImage(uniformDistributionImage);
         uniformDistribution.setFitHeight(35);
         uniformDistribution.setFitWidth(35);
@@ -85,6 +99,30 @@ public class SidebarController implements Initializable {
         uniformDistributionContainer.setPrefWidth(80);
         uniformDistributionContainer.setLayoutX(1);
         uniformDistributionContainer.setLayoutY(240);
+
+        var normalDistributionImage = new Image(String.valueOf(getClass().getResource("/normal_distribution.png")));
+        normalDistribution.setImage(normalDistributionImage);
+        normalDistribution.setFitHeight(35);
+        normalDistribution.setFitWidth(35);
+        normalDistribution.setX(25);
+        normalDistribution.setY(335);
+
+        normalDistributionContainer.setPrefHeight(70);
+        normalDistributionContainer.setPrefWidth(80);
+        normalDistributionContainer.setLayoutX(1);
+        normalDistributionContainer.setLayoutY(320);
+
+        var errorImage = new Image(String.valueOf(getClass().getResource("/error.png")));
+        error.setImage(errorImage);
+        error.setFitHeight(35);
+        error.setFitWidth(35);
+        error.setX(25);
+        error.setY(410);
+
+        errorContainer.setPrefHeight(70);
+        errorContainer.setPrefWidth(80);
+        errorContainer.setLayoutX(1);
+        errorContainer.setLayoutY(400);
 
         var fields = this.getClass().getDeclaredFields();
         for (var field : fields) {
@@ -124,4 +162,23 @@ public class SidebarController implements Initializable {
         EventBusFactory.getEventBus().post(event);
     }
 
+    @FXML
+    public void normalDistributionOnClick() {
+        activeButton.setLayoutY(320);
+        activeButtonText.setLayoutX(60);
+        activeButtonText.setLayoutY(347);
+        activeButtonText.setText("NOR");
+        var event = new StringEvent(StringEvent.EventTypes.OPEN_NORMAL_WINDOW, "");
+        EventBusFactory.getEventBus().post(event);
+    }
+
+    @FXML
+    public void errorOnClick() {
+        activeButton.setLayoutY(400);
+        activeButtonText.setLayoutX(60);
+        activeButtonText.setLayoutY(427);
+        activeButtonText.setText("ERR");
+        var event = new StringEvent(StringEvent.EventTypes.OPEN_ERROR_WINDOW, "");
+        EventBusFactory.getEventBus().post(event);
+    }
 }

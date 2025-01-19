@@ -2,9 +2,7 @@ package com.oryreq.montecarlomethod.services;
 
 import com.oryreq.montecarlomethod.models.Interval;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -62,6 +60,7 @@ public class MonteCarloCroupier {
 
         for (int i = 0; i < draws; i++) {
             double number = Math.random();
+            //System.out.println(number);
             var interval = getInterval(number, intervals);
             int valueCount = results.get(interval);
             results.put(interval, valueCount + 1);
@@ -84,6 +83,30 @@ public class MonteCarloCroupier {
                 .filter(interval -> interval.contains(number))
                 .findFirst()
                 .orElse(null);
+    }
+
+                        /*--------------------------------------*
+                         *          Standard playing            *
+                         *--------------------------------------*/
+    public Map<Interval, Integer> standardPlay(int draws, List<Interval> intervals, int accumulator, double mathExpectation, double standardDeviation) {
+        var results = createDefaultStandardMap(intervals);
+        for (int i = 0; i < draws; i++) {
+            double accumulatedNumber = 0;
+            for (int j = 0; j < accumulator; j++) {
+                accumulatedNumber += Math.random();
+            }
+            accumulatedNumber -= 6;
+            accumulatedNumber = standardDeviation * accumulatedNumber + mathExpectation;
+            //System.out.println(accumulatedNumber);
+            var interval = getInterval(accumulatedNumber, intervals);
+            int valueCount = results.get(interval);
+            results.put(interval, valueCount + 1);
+        }
+        return results;
+    }
+
+    private Map<Interval, Integer> createDefaultStandardMap(List<Interval> intervals) {
+        return createDefaultContinuousMap(intervals);
     }
 
 }

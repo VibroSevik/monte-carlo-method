@@ -111,12 +111,17 @@ public class HistogramService<T, U> {
     }
 
     public HistogramService<T, U> setMargins(double margin) {
-        ((CategoryAxis) this.histogram.getXAxis()).setStartMargin(margin);
+        ((CategoryAxis) this.histogram.getXAxis()).setStartMargin(5);
         ((CategoryAxis) this.histogram.getXAxis()).setEndMargin(margin);
         return this;
     }
 
     public HistogramService<T, U> changeYAxisScale(int upperBound, int tickUnit) {
+        return this.setUpperBound(upperBound)
+                .setTickUnit(tickUnit);
+    }
+
+    public HistogramService<T, U> changeYAxisScale(double upperBound, double tickUnit) {
         return this.setUpperBound(upperBound)
                 .setTickUnit(tickUnit);
     }

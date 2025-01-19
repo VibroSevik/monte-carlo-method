@@ -1,18 +1,18 @@
-package com.oryreq.montecarlomethod.windows.uniform_croupier;
+package com.oryreq.montecarlomethod.windows.error;
 
-import com.google.common.eventbus.Subscribe;
 import com.oryreq.montecarlomethod.Application;
 import com.oryreq.montecarlomethod.models.CharacteristicsData;
-import com.oryreq.montecarlomethod.models.StringEvent;
+import com.oryreq.montecarlomethod.models.ErrorData;
 import com.oryreq.montecarlomethod.services.EventBusFactory;
 import com.oryreq.montecarlomethod.services.SampleCharacteristicsService;
 import com.oryreq.montecarlomethod.windows.CustomWindow;
-
+import com.oryreq.montecarlomethod.windows.normal_croupier.NormalCroupierService;
+import com.oryreq.montecarlomethod.windows.uniform_croupier.UniformCroupierService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UniformCroupierController implements Initializable {
+public class ErrorController implements Initializable {
 
 
     /*---------------------------------------------*
@@ -70,55 +70,66 @@ public class UniformCroupierController implements Initializable {
     protected Label drawsMillion;
 
     @FXML
-    protected Label drawsCustom;
-
-    @FXML
-    private StackedBarChart<String, Integer> histogram;
+    protected TableView<ErrorData> table;
 
 
     /*----------------------------------*
      *               Data               *
      *----------------------------------*/
-    private double a = -3;
-    private double b = -1;
+    private double mathExpectation = -0.5;
+    private double standardError = 1;
+    private int a = -3;
+    private int b = -1;
     private int draws;
 
+    private ErrorService errorService;
+    private NormalCroupierService normalCroupierService;
     private UniformCroupierService uniformCroupierService;
 
 
-    /*------------------------------------*
-     *          Callable windows          *
-     *------------------------------------*/
-    private CustomWindow inputDataWindow;
-    private CustomWindow variationsWindow;
-    private CustomWindow characteristicsWindow;
-
     private void play() {
-        var drawData = uniformCroupierService.getDrawData(a, b, draws);
-        uniformCroupierService.buildHistogram(draws, drawData, activeWindow);
+        normalCroupierService = new NormalCroupierService();
+        uniformCroupierService = new UniformCroupierService();
 
-        try {
-            this.variationsWindow = this.createVariationsWindow();
-            this.variationsWindow.setInitOwner(Application.primaryStage);
-            EventBusFactory.getEventBus().post(drawData);
-            this.variationsWindow.show();
+        var normalDrawData = normalCroupierService.getDrawData(mathExpectation, standardError, draws);
+        var uniformDrawData = uniformCroupierService.getDrawData(a, b, draws);
 
-            this.characteristicsWindow = this.createCharacteristicsWindow();
-            this.characteristicsWindow.setInitOwner(Application.primaryStage);
-            var selection = SampleCharacteristicsService.fromUniformDrawDataToSelection(drawData);
+        double firstErrorCount1 = 0;
+        int secondErrorCount1 = 0;
+        double firstErrorCount2 = 0;
+        int secondErrorCount2 = 0;
+        int lineMean = (a + b) / 2;
 
-            var mathExpectation = SampleCharacteristicsService.mathExpectation(selection);
-            var biasVariance = SampleCharacteristicsService.biasVariance(selection);
-            var unbiasVariance = SampleCharacteristicsService.unbiasVariance(selection);
-            var biasStandardDeviation = Math.sqrt(biasVariance);
-            var unbiasStandardDeviation = Math.sqrt(unbiasVariance);
+        for (int i = 0; i < normalDrawData.size(); i++) {
+            var begin = Double.parseDouble(normalDrawData.get(i).getNumber().split(",")[0].split("\\(")[1]);
+            var end = Double.parseDouble(normalDrawData.get(i).getNumber().split(",")[1].split("\\)")[0]);
+            double number = (begin + end) / 2;
 
-            var characteristics = new CharacteristicsData(mathExpectation, biasVariance, unbiasVariance, biasStandardDeviation, unbiasStandardDeviation);
-            EventBusFactory.getEventBus().post(characteristics);
-            this.characteristicsWindow.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (number >= a && number <= lineMean) {
+                firstErrorCount1 += Integer.parseInt(normalDrawData.get(i).getDropsCount());
+            }
+
+            if (number >= a && number <= b) {
+                firstErrorCount2 += Integer.parseInt(normalDrawData.get(i).getDropsCount());
+            }
         }
+
+        for (int i = 0; i < uniformDrawData.size(); i++) {
+            var begin = Double.parseDouble(uniformDrawData.get(i).getNumber().split(",")[0].split("\\(")[1]);
+            var end = Double.parseDouble(uniformDrawData.get(i).getNumber().split(",")[1].split("\\)")[0]);
+            double number = (begin + end) / 2;
+
+            if (number >= lineMean && number <= b) {
+                secondErrorCount1 += Integer.parseInt(uniformDrawData.get(i).getDropsCount());
+            }
+        }
+
+        double errorFrequency = (firstErrorCount1 + secondErrorCount1) / (2 * draws);
+
+        var errorData = new ErrorData(2 * draws, firstErrorCount1, secondErrorCount1, errorFrequency);
+
+        this.errorService.clearTable();
+        this.errorService.buildTable(errorData);
     }
 
 
@@ -149,36 +160,6 @@ public class UniformCroupierController implements Initializable {
         play();
     }
 
-    @FXML
-    protected void onCustomDrawsClicked() {
-        drawsCustom.requestFocus();
-        try {
-            this.inputDataWindow = this.createInputWindow();
-            this.inputDataWindow.setInitOwner(Application.primaryStage);
-            this.inputDataWindow.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /*-------------------------------------*
-     *          Eventbus handlers          *
-     *-------------------------------------*/
-    @Subscribe
-    public void handleInputCustomData(StringEvent event) {
-        if (!event.getType().equals(StringEvent.EventTypes.HANDLE_CONTINUOUS_INPUT)) {
-            return;
-        }
-
-        var data = event.getValue();
-        this.draws = Integer.parseInt(data.split(" ")[0]);
-        this.a = Double.parseDouble(data.split(" ")[1]);
-        this.b = Double.parseDouble(data.split(" ")[2]);
-        this.inputDataWindow.close();
-        play();
-    }
-
 
     /*--------------------------------------*
      *          Initialize actions          *
@@ -191,7 +172,7 @@ public class UniformCroupierController implements Initializable {
         setStars();
         updateElementsForStars();
 
-        this.uniformCroupierService = new UniformCroupierService(histogram);
+        this.errorService = new ErrorService(table);
     }
 
     private void initializeElements() {
@@ -199,10 +180,10 @@ public class UniformCroupierController implements Initializable {
         this.activeButton.setPrefHeight(70);
         this.activeButton.setPrefWidth(155);
         this.activeButton.setLayoutX(-30);
-        this.activeButton.setLayoutY(240);
+        this.activeButton.setLayoutY(400);
 
-        this.activeButtonText.setLayoutX(-2);
-        this.activeButtonText.setLayoutY(267);
+        this.activeButtonText.setLayoutX(-5);
+        this.activeButtonText.setLayoutY(427);
 
         // Current window elements
         this.version.setLayoutX(150);
@@ -232,11 +213,14 @@ public class UniformCroupierController implements Initializable {
         this.drawsMillion.setLayoutX(350);
         this.drawsMillion.setLayoutY(290);
 
-        this.drawsCustom.setLayoutX(450);
-        this.drawsCustom.setLayoutY(290);
+        //this.drawsCustom.setLayoutX(450);
+        //this.drawsCustom.setLayoutY(290);
 
-        this.histogram.setLayoutX(130);
-        this.histogram.setLayoutY(350);
+        //this.histogram.setLayoutX(130);
+        //this.histogram.setLayoutY(350);
+        this.table.setLayoutX(130);
+        this.table.setLayoutY(350);
+        this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     // установка звезд вверху
@@ -292,42 +276,6 @@ public class UniformCroupierController implements Initializable {
 
             }
         }
-    }
-
-    private CustomWindow createInputWindow() throws Exception {
-        var resource = Application.class.getResource("windows/uniform_croupier/subwindows/input-distribution-data.fxml");
-        var styles = Application.class.getResource("styles.css");
-
-        var stage = new Stage();
-        stage.setTitle("Input distribution data");
-        stage.getIcons().add(new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png"));
-        //this.stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setResizable(false);
-        return new CustomWindow(resource, styles, stage);
-    }
-
-    private CustomWindow createVariationsWindow() throws Exception {
-        var resource = Application.class.getResource("windows/show_variations/show-variations.fxml");
-        var styles = Application.class.getResource("styles.css");
-
-        var stage = new Stage();
-        stage.setTitle("Variations");
-        stage.getIcons().add(new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png"));
-        //this.stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setResizable(false);
-        return new CustomWindow(resource, styles, stage, 500, 350);
-    }
-
-    private CustomWindow createCharacteristicsWindow() throws Exception {
-        var resource = Application.class.getResource("windows/show_characteristics/show-characteristics.fxml");
-        var styles = Application.class.getResource("styles.css");
-
-        var stage = new Stage();
-        stage.setTitle("Characteristics");
-        stage.getIcons().add(new Image("file:./src/main/resources/com/oryreq/montecarlomethod/logo.png"));
-        //this.stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setResizable(false);
-        return new CustomWindow(resource, styles, stage, 700, 50);
     }
 
 }

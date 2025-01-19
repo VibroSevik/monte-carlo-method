@@ -22,7 +22,7 @@
 
   <Pane fx:id="versionContainer">
     <Pane fx:id="versionCircle" styleClass="version__circle"/>
-    <Label fx:id="version" styleClass="version__text">Activated | v. 0.1.0</Label>
+    <Label fx:id="version" styleClass="version__text">Activated | v. 0.3.0</Label>
   </Pane>
 
   <Label fx:id="overviewButton" styleClass="overview__button">Overview</Label>

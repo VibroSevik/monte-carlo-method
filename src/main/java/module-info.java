@@ -20,8 +20,17 @@ module com.oryreq.montecarlomethod {
     exports com.oryreq.montecarlomethod.windows.uniform_croupier.subwindows.input_data;
     opens com.oryreq.montecarlomethod.windows.uniform_croupier.subwindows.input_data to javafx.fxml;
 
+    exports com.oryreq.montecarlomethod.windows.normal_croupier.subwindows.input_data;
+    opens com.oryreq.montecarlomethod.windows.normal_croupier.subwindows.input_data to javafx.fxml;
+
+    exports com.oryreq.montecarlomethod.windows.error;
+    opens com.oryreq.montecarlomethod.windows.error to javafx.fxml;
+
     exports com.oryreq.montecarlomethod.windows.show_variations;
     opens com.oryreq.montecarlomethod.windows.show_variations to javafx.fxml;
+
+    exports com.oryreq.montecarlomethod.windows.show_characteristics to javafx.fxml;
+    opens com.oryreq.montecarlomethod.windows.show_characteristics to javafx.fxml, com.google.common;
 
     exports com.oryreq.montecarlomethod.windows;
     opens com.oryreq.montecarlomethod.windows to javafx.fxml;
@@ -30,6 +39,8 @@ module com.oryreq.montecarlomethod {
     opens com.oryreq.montecarlomethod.windows.binomial_croupier to javafx.fxml;
 
     exports com.oryreq.montecarlomethod.windows.uniform_croupier to javafx.fxml;
-
     opens com.oryreq.montecarlomethod.windows.uniform_croupier to com.google.common, javafx.fxml;
+
+    exports com.oryreq.montecarlomethod.windows.normal_croupier to javafx.fxml;
+    opens com.oryreq.montecarlomethod.windows.normal_croupier to com.google.common, javafx.fxml;
 }
